@@ -30,7 +30,7 @@ import org.tinyuml.util.Command;
 /**
  * A command class to paste elements to a diagram.
  *
- * @author Nicolás Salas V.
+ * @author Nicols Salas V.
  * @version 1.0
  * @link https://github.com/anachronic/TinyUML
  */

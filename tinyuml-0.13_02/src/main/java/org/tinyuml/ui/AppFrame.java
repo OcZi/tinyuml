@@ -80,6 +80,7 @@ implements EditorStateListener, AppCommandListener, SelectionListener {
   private JTabbedPane tabbedPane;
   private JLabel coordLabel = new JLabel("    ");
   private JLabel memLabel = new JLabel("    ");
+  private JLabel countLabel = new JLabel("    ");
   private UmlModel umlModel;
   private DiagramEditor currentEditor;
   private transient Timer timer = new Timer();
@@ -242,6 +243,7 @@ implements EditorStateListener, AppCommandListener, SelectionListener {
     JPanel statusbar = new JPanel(new BorderLayout());
     statusbar.add(coordLabel, BorderLayout.WEST);
     statusbar.add(memLabel, BorderLayout.EAST);
+    statusbar.add(countLabel, BorderLayout.NORTH); // New elements count
     getContentPane().add(statusbar, BorderLayout.SOUTH);
   }
 
@@ -284,6 +286,13 @@ implements EditorStateListener, AppCommandListener, SelectionListener {
     // spring loading is implemented here
     staticToolbarManager.doClick("SELECT_MODE");
     updateMenuAndToolbars(editor);
+    // Update counter for each element that can nest other elements (parameters doesn't pass the element itself)
+    countLabel.setText(
+              String.format("Elements: %d   ", getCurrentEditor().getDiagram()
+                      .getChildren().stream()
+                      .filter(DiagramElement::canNestElements) // Java +8 moment
+                      .count())
+    );
   }
 
   /**
@@ -629,7 +638,7 @@ implements EditorStateListener, AppCommandListener, SelectionListener {
 	  if(hasSelection)
 	    lastCopiedElements = getCurrentEditor().getSelectedElements();
 
-	  //adicionalmente, hay que habilitar el botón PASTE!
+	  //adicionalmente, hay que habilitar el botn PASTE!
 	  menumanager.enableMenuItem("PASTE", hasSelection);
 	  toolbarmanager.enableButton("PASTE", hasSelection);
   }
